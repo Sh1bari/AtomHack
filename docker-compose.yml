@@ -55,7 +55,7 @@ services:
       - "traefik.http.routers.simulation.entrypoints=websecure"
       - "traefik.http.routers.simulation.tls=true"
       - "traefik.http.routers.simulation.tls.certresolver=myresolver"
-      - "traefik.http.services.efsimulations.loadbalancer.server.port=8081"
+      - "traefik.http.services.simulation.loadbalancer.server.port=8081"
       - "traefik.http.routers.simulation.priority=25"
       - "traefik.docker.network=traefik_network"
 
