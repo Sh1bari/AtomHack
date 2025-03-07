@@ -11,10 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.noxly.simulation.models.entities.redis.Reservoir;
 import ru.noxly.simulation.models.models.dtos.SpaceByIdDto;
 import ru.noxly.simulation.models.models.dtos.SpaceDto;
 import ru.noxly.simulation.models.models.requests.SpaceCreateDtoReq;
 import ru.noxly.simulation.models.models.requests.SpaceUpdateDtoReq;
+import ru.noxly.simulation.repositories.redis.ReservoirRedisRepository;
 import ru.noxly.simulation.services.SpaceService;
 
 import java.util.List;
@@ -81,5 +83,21 @@ public class SpaceController {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(response);
+	}
+
+	private final ReservoirRedisRepository repo;
+
+	@Operation(summary = "Получить информацию о пространстве (с резервуарами и трубами)")
+	@ApiResponses()
+	@GetMapping("/test")
+	public ResponseEntity<?> test() {
+		repo.save(Reservoir.init()
+				.setId(1L)
+				.setPressure(100.0)
+				.build());
+
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body("response");
 	}
 }
