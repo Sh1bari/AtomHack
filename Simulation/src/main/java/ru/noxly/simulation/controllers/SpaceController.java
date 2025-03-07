@@ -25,7 +25,7 @@ import java.util.List;
 @CrossOrigin
 @SecurityRequirement(name = "bearerAuth")
 @RequestMapping("")
-@Tag(name = "Space API", description = "")
+@Tag(name = "Space API", description = "Операции с пространствами")
 public class SpaceController {
 
 	private final SpaceService spaceService;
