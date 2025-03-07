@@ -1,0 +1,43 @@
+services:
+  simulationpostgres:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
+    image: timescale/timescaledb:latest-pg16
+    container_name: simulationpostgres
+    environment:
+      - POSTGRES_DB=simulation
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "127.0.0.1:5434:5432"
+    networks:
+      - atom-custom-network
+    volumes:
+      - simulation_postgres_data:/var/lib/postgresql/data
+
+  redis:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "127.0.0.1:6380:6379"
+    networks:
+      - atom-custom-network
+
+networks:
+  traefik_network:
+    external: true
+  atom-custom-network:
+    external: true
+
+volumes:
+  simulation_postgres_data:

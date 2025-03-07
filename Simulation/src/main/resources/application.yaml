@@ -17,7 +17,7 @@ spring:
       mode: always
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:${POSTGRES_PORT:5435}/${POSTGRES_DB_NAME:postgres}
+    url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:${POSTGRES_PORT:5435}/${POSTGRES_DB_NAME:simulation}
     username: ${POSTGRES_USERNAME:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
   jpa:
