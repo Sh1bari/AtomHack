@@ -11,7 +11,7 @@ public class PipeCreateDtoReq {
 
     private final Double diameter;
 
-    private final Integer sourceId;
+    private final Long sourceId;
 
-    private final Integer targetId;
+    private final Long targetId;
 }
