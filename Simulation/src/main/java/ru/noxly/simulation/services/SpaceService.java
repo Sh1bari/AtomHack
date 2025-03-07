@@ -11,7 +11,7 @@ public class SpaceService {
 
 	private final RepoResolver repoResolver;
 
-	/*public Space findById(){
-
-	}*/
+	public Space findById(final Long id){
+		return repoResolver.resolve(Space.class).findById(id);
+	}
 }
