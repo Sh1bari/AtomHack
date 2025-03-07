@@ -12,9 +12,6 @@ spring:
     multipart:
       max-file-size: 200MB
       max-request-size: 200MB
-  sql:
-    init:
-      mode: always
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:${POSTGRES_PORT:5434}/${POSTGRES_DB_NAME:simulation}

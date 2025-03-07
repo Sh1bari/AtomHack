@@ -1,0 +1,5 @@
+docker build -t registry.sh1bari.ru/atom/simulation:1.0.0 ./Simulation
+
+docker push registry.sh1bari.ru/atom/simulation:1.0.0
+
+

@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="compose">
-      <change afterPath="$PROJECT_DIR$/tunnel.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +23,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -76,11 +77,15 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "jdk.selected.JAVA_MODULE": "corretto-21",
-    "last_opened_file_path": "D:/AtomHack/AtomHack",
+    "last_opened_file_path": "D:/AtomHack/AtomHack/Simulation",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -100,11 +105,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\AtomHack\AtomHack\Simulation" />
       <recent name="D:\AtomHack\AtomHack" />
       <recent name="D:\AtomHack\AtomHack\web-socket\src\main\java\ru\noxly\websocket" />
       <recent name="D:\AtomHack\AtomHack\web-socket\src\main\java" />
       <recent name="D:\AtomHack\AtomHack\Simulation\src\main\java\ru\noxly\simulation\utils" />
-      <recent name="D:\AtomHack\AtomHack\web-socket" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="ru.noxly.simulation.repositories" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -138,7 +146,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1741376905725</updated>
-      <workItem from="1741376906742" duration="2982000" />
+      <workItem from="1741376906742" duration="5617000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -164,7 +172,31 @@
       <option name="project" value="LOCAL" />
       <updated>1741379297354</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="compose">
+      <option name="closed" value="true" />
+      <created>1741381176353</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1741381176353</updated>
+    </task>
+    <task id="LOCAL-00005" summary="compose">
+      <option name="closed" value="true" />
+      <created>1741381666095</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1741381666095</updated>
+    </task>
+    <task id="LOCAL-00006" summary="compose">
+      <option name="closed" value="true" />
+      <created>1741382434592</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1741382434592</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
