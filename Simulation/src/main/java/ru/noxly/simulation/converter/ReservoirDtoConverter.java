@@ -10,6 +10,12 @@ import ru.noxly.simulation.models.models.dtos.ReservoirDto;
 public class ReservoirDtoConverter implements Converter<Reservoir, ReservoirDto> {
 	@Override
 	public ReservoirDto convert(@NonNull final Reservoir source) {
-		return null;
+		return ReservoirDto.init()
+				.setId(source.getId())
+				.setArea(source.getArea())
+				.setLevel(source.getLevel())
+				.setPressure(source.getPressure())
+				.setSpaceId(source.getSpace().getId())
+				.build();
 	}
 }

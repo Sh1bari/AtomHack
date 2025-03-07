@@ -10,6 +10,11 @@ import ru.noxly.simulation.models.models.dtos.PipeDto;
 public class PipeDtoConverter implements Converter<Pipe, PipeDto> {
 	@Override
 	public PipeDto convert(@NonNull final Pipe source) {
-		return null;
+		return PipeDto.init()
+				.setId(source.getId())
+				.setDiameter(source.getDiameter())
+				.setSourceId(source.getTarget().getId())
+				.setTargetId(source.getSource().getId())
+				.build();
 	}
 }
