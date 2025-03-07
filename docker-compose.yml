@@ -48,7 +48,7 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - traefik_network
-      - my-custom-network
+      - atom-custom-network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.simulation.rule=Host(`hack.noxly.ru`)"
