@@ -42,7 +42,7 @@ services:
           - "node.labels.region == ru"  # Запускаем только на RU сервере
     image: registry.sh1bari.ru/atom/simulation:1.0.0
     environment:
-      - POSTGRES_ADDRESS=simulation
+      - POSTGRES_ADDRESS=simulationpostgres
       - POSTGRES_PORT=5432
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=postgres
