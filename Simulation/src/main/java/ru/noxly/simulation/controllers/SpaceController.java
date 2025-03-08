@@ -7,6 +7,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +22,7 @@ import ru.noxly.simulation.models.models.requests.SpaceCreateDtoReq;
 import ru.noxly.simulation.models.models.requests.SpaceUpdateDtoReq;
 import ru.noxly.simulation.redis.ReservoirPublisher;
 import ru.noxly.simulation.services.SpaceService;
+import ru.noxly.simulation.specifications.SpaceSpecification;
 
 import java.util.List;
 
@@ -79,6 +84,20 @@ public class SpaceController {
 	public ResponseEntity<SpaceByIdDto> findById(@PathVariable Long id) {
 		val space = spaceService.findById(id);
 		val response = conversionService.convert(space, SpaceByIdDto.class);
+
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(response);
+	}
+
+	@Operation(summary = "Получить информацию о пространствах с пагинацией и фильтром по названию")
+	@ApiResponses()
+	@GetMapping("/spaces/{pattern}")
+	public ResponseEntity<Page<SpaceDto>> findById(@PathVariable String pattern,
+												   @PageableDefault Pageable pageable) {
+		val spec = Specification.where(SpaceSpecification.hasName(pattern));
+		val spaces = spaceService.findByPatternAndPageable(spec, pageable);
+		val response = spaces.map(space -> conversionService.convert(space, SpaceDto.class));
 
 		return ResponseEntity
 				.status(HttpStatus.OK)

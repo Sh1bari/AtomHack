@@ -2,7 +2,8 @@ package ru.noxly.simulation.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +20,6 @@ import java.util.List;
 public class SpaceService {
 
 	private final RepoResolver repoResolver;
-
-	private final ConversionService conversionService;
 
 	public Space findById(final Long id) {
 		return repoResolver.resolve(Space.class).findById(id);
@@ -50,5 +49,9 @@ public class SpaceService {
 		repoResolver.resolve(Space.class).save(entity);
 
 		return entity;
+	}
+
+	public Page<Space> findByPatternAndPageable(Specification<Space> spec, Pageable pageable) {
+		return repoResolver.resolve(Space.class).findAll(spec, pageable);
 	}
 }
