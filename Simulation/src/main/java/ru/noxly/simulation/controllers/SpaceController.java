@@ -93,7 +93,7 @@ public class SpaceController {
 	@Operation(summary = "Получить информацию о пространствах с пагинацией и фильтром по названию")
 	@ApiResponses()
 	@GetMapping("/spaces")
-	public ResponseEntity<Page<SpaceDto>> findAll(@RequestParam String pattern,
+	public ResponseEntity<Page<SpaceDto>> findAll(@RequestParam(required = false) String pattern,
 												  @PageableDefault Pageable pageable) {
 		val spec = Specification.where(SpaceSpecification.hasName(pattern));
 		val spaces = spaceService.findByPatternAndPageable(spec, pageable);
