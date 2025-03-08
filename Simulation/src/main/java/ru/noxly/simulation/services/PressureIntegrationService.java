@@ -1,7 +1,9 @@
 package ru.noxly.simulation.services;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.noxly.simulation.exceptions.GeneralException;
 import ru.noxly.simulation.models.entities.redis.Reservoir;
 import ru.noxly.simulation.repositories.RepoResolver;
 import ru.noxly.simulation.repositories.redis.ReservoirRedisRepository;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PressureIntegrationService {
@@ -53,8 +56,12 @@ public class PressureIntegrationService {
     private Map<Long, Double> extractPressureList() {
         Map<Long, Double> pressureMap = new HashMap<>();
         for (long id = 1; id <= 10; id++) {
-            val pressure = dynDnsClient.getPressure(id);
-            pressureMap.put(id, pressure);
+            try {
+                val pressure = dynDnsClient.getPressure(id);
+                pressureMap.put(id, pressure);
+            } catch (GeneralException e) {
+                log.error("При получении давления по айди " + id + "возникла ошибка" + e.getMessage());
+            }
         }
 
         return pressureMap;
