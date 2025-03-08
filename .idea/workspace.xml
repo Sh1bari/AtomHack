@@ -127,7 +127,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.SimulationApplication">
+  <component name="RunManager" selected="Spring Boot.WebSocketApplication">
     <configuration name="SimulationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Simulation" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.noxly.simulation.SimulationApplication" />
@@ -152,7 +152,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741376905725</updated>
       <workItem from="1741376906742" duration="21438000" />
-      <workItem from="1741449420183" duration="1896000" />
+      <workItem from="1741449420183" duration="5135000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -306,7 +306,55 @@
       <option name="project" value="LOCAL" />
       <updated>1741458717462</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741460586251</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1741460586251</updated>
+    </task>
+    <task id="LOCAL-00021" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741460818034</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1741460818034</updated>
+    </task>
+    <task id="LOCAL-00022" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741460940399</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1741460940399</updated>
+    </task>
+    <task id="LOCAL-00023" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741461525737</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1741461525737</updated>
+    </task>
+    <task id="LOCAL-00024" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741461634217</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1741461634217</updated>
+    </task>
+    <task id="LOCAL-00025" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741461884522</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1741461884522</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
