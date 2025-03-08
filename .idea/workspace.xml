@@ -4,24 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="compose">
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/configs/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/advice/GlobalExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/exceptions/AppError.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/exceptions/GeneralException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/exceptions/GlobalAppException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/entities/redis/Reservoir.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/repositories/redis/ReservoirRedisRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/RedisService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirRedisService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/utils/ReservoirIdUtil.java" afterDir="false" />
+    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="Подключение редис">
+      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/redis/ReservoirPublisher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/common/Constant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/configs/RedisConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/configs/WebSocketConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/models/ReservoirDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/redis/ReservoirSubscriber.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/services/SocketMessageSender.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/configs/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/configs/RedisConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/SpaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/SpaceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/converter/ReservoirDtoConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/converter/ReservoirDtoConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/utils/CommonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/utils/CommonUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tunnel.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/tunnel.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-socket/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web-socket/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-socket/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/web-socket/src/main/resources/application.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,6 +126,8 @@
       <recent name="D:\AtomHack\AtomHack\Simulation" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="ru.noxly.websocket.configs" />
+      <recent name="ru.noxly.websocket.models" />
       <recent name="ru.noxly.simulation.services" />
       <recent name="ru.noxly.simulation.configs" />
       <recent name="ru.noxly.simulation.repositories" />
@@ -142,7 +140,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.SimulationApplication">
+  <component name="RunManager" selected="Spring Boot.WebSocketApplication">
     <configuration name="SimulationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Simulation" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.noxly.simulation.SimulationApplication" />
@@ -166,7 +164,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1741376905725</updated>
-      <workItem from="1741376906742" duration="10372000" />
+      <workItem from="1741376906742" duration="17386000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -256,7 +254,23 @@
       <option name="project" value="LOCAL" />
       <updated>1741383922428</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Подключение редис">
+      <option name="closed" value="true" />
+      <created>1741387635929</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1741387635929</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Подключение редис">
+      <option name="closed" value="true" />
+      <created>1741387992942</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1741387992942</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -276,6 +290,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Init" />
     <MESSAGE value="compose" />
-    <option name="LAST_COMMIT_MESSAGE" value="compose" />
+    <MESSAGE value="Подключение редис" />
+    <option name="LAST_COMMIT_MESSAGE" value="Подключение редис" />
   </component>
 </project>

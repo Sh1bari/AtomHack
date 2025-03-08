@@ -1,4 +1,4 @@
-package ru.noxly.simulation.configs;
+package ru.noxly.websocket.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,10 +9,13 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
-import ru.noxly.simulation.models.models.dtos.ReservoirDto;
+import ru.noxly.websocket.redis.ReservoirSubscriber;
 
 import java.time.Duration;
 
@@ -51,19 +54,17 @@ public class RedisConfig {
         return new JedisConnectionFactory(redisConfig, clientConfig);
     }
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setValueSerializer(new GenericToStringSerializer<>(Object.class));
-        return template;
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory,
+                                                                       MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, new PatternTopic("reservoir-updates:*")); // Подписка на все spaceId
+        return container;
     }
 
     @Bean
-    public RedisTemplate<String, ReservoirDto> pubSubRedisTemplate(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
-        RedisTemplate<String, ReservoirDto> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(ReservoirDto.class));
-        return template;
+    public MessageListenerAdapter messageListenerAdapter(ReservoirSubscriber subscriber) {
+        return new MessageListenerAdapter(subscriber, "receiveMessage");
     }
 
     @Bean

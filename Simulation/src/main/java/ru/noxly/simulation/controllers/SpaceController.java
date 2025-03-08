@@ -11,12 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.noxly.simulation.models.entities.redis.Reservoir;
+import ru.noxly.simulation.models.models.dtos.ReservoirDto;
 import ru.noxly.simulation.models.models.dtos.SpaceByIdDto;
 import ru.noxly.simulation.models.models.dtos.SpaceDto;
 import ru.noxly.simulation.models.models.requests.SpaceCreateDtoReq;
 import ru.noxly.simulation.models.models.requests.SpaceUpdateDtoReq;
-import ru.noxly.simulation.repositories.redis.ReservoirRedisRepository;
+import ru.noxly.simulation.redis.ReservoirPublisher;
 import ru.noxly.simulation.services.SpaceService;
 
 import java.util.List;
@@ -85,19 +85,23 @@ public class SpaceController {
 				.body(response);
 	}
 
-	private final ReservoirRedisRepository repo;
-
-	@Operation(summary = "Получить информацию о пространстве (с резервуарами и трубами)")
+	private final ReservoirPublisher reservoirPublisher;
+	@Operation(summary = "test")
 	@ApiResponses()
 	@GetMapping("/test")
-	public ResponseEntity<?> test() {
-		repo.save(Reservoir.init()
-				.setId(1L)
-				.setPressure(100.0)
-				.build());
+	public ResponseEntity<?> test(@RequestParam Long spaceId, @RequestParam Double pressure) {
+		reservoirPublisher.publishUpdate(
+				ReservoirDto.init()
+						.setSpaceId(spaceId)
+						.setId(1L)
+						.setPressure(pressure)
+						.setLevel(5D)
+						.setArea(5D)
+				.build()
+		);
 
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body("response");
+				.body("gotovo");
 	}
 }

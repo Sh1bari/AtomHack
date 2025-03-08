@@ -43,7 +43,6 @@ management:
   endpoint:
     health:
       show-details: always
-services:
-  main:
-    url: ${MAIN_SERVER_URL:http://localhost:8081}
-    timeOut: ${MAIN_SERVER_TIMEOUT:3000} #in millis
+redis:
+  host: ${REDIS_HOST:localhost}       # Адрес Redis-сервера
+  port: ${REDIS_PORT:6380}
