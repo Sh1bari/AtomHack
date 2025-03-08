@@ -39,14 +39,14 @@ public class SpaceController {
 
 	private final ConversionService conversionService;
 
-	@Operation(summary = "Получить список всех пространств")
+	@Operation(summary = "Получить информацию о пространствах с пагинацией и фильтром по названию")
 	@ApiResponses()
 	@GetMapping("/spaces")
-	public ResponseEntity<List<SpaceDto>> findAll() {
-		val space = spaceService.findAll();
-		val response = space.stream()
-				.map(o -> conversionService.convert(o, SpaceDto.class))
-				.toList();
+	public ResponseEntity<Page<SpaceDto>> findAll(@RequestParam(required = false) String pattern,
+												  @PageableDefault Pageable pageable) {
+		val spec = Specification.where(SpaceSpecification.hasName(pattern));
+		val spaces = spaceService.findByPatternAndPageable(spec, pageable);
+		val response = spaces.map(space -> conversionService.convert(space, SpaceDto.class));
 
 		return ResponseEntity
 				.status(HttpStatus.OK)
@@ -84,20 +84,6 @@ public class SpaceController {
 	public ResponseEntity<SpaceByIdDto> findById(@PathVariable Long id) {
 		val space = spaceService.findById(id);
 		val response = conversionService.convert(space, SpaceByIdDto.class);
-
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(response);
-	}
-
-	@Operation(summary = "Получить информацию о пространствах с пагинацией и фильтром по названию")
-	@ApiResponses()
-	@GetMapping("/spaces")
-	public ResponseEntity<Page<SpaceDto>> findAll(@RequestParam(required = false) String pattern,
-												  @PageableDefault Pageable pageable) {
-		val spec = Specification.where(SpaceSpecification.hasName(pattern));
-		val spaces = spaceService.findByPatternAndPageable(spec, pageable);
-		val response = spaces.map(space -> conversionService.convert(space, SpaceDto.class));
 
 		return ResponseEntity
 				.status(HttpStatus.OK)
