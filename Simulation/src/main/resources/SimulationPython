@@ -1,0 +1,190 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+
+# ------------------ ПАРАМЕТРЫ СИСТЕМЫ ------------------
+g = 9.81
+rho = 1000
+mu = 1.5e-3
+dt = 0.5
+
+# УСТАНАВЛИВАЕМ НОВЫЕ НАЧАЛЬНЫЕ УРОВНИ (h0)
+reservoirs = [
+    {'S': 1.5, 'P0': 1.2 * rho * g},   # ~1.2 м
+    {'S': 2.0, 'P0': 0.7 * rho * g},   # ~0.7 м
+    {'S': 1.8, 'P0': 1.6 * rho * g},   # ~1.6 м
+    {'S': 1.2, 'P0': 1.0 * rho * g},   # ~1.0 м
+    {'S': 1.0, 'P0': 1.8 * rho * g},   # ~1.8 м
+]
+
+connections = [
+    {'i': 0, 'j': 1, 'S': 0.15},
+    {'i': 1, 'j': 2, 'S': 0.10},
+    {'i': 2, 'j': 3, 'S': 0.08},
+    {'i': 3, 'j': 4, 'S': 0.18},
+    {'i': 0, 'j': 3, 'S': 0.22},
+    {'i': 1, 'j': 4, 'S': 0.12}
+]
+
+# РЕЗЕРВУАРЫ ПОНИЖЕ
+reservoir_pos = np.array([
+    [4,  0.0],
+    [6, -3.0],
+    [8,  0.0],
+    [10, -3.0],
+    [12, 0.0]
+])
+
+# ------------------ КЛАСС ВИЗУАЛИЗАЦИИ ------------------
+class HydraulicVisualizer:
+    def __init__(self):
+        # УВЕЛИЧИВАЕМ ПОЛОТНО и ДИАПАЗОН ПО ОСИ Y
+        self.fig, self.ax = plt.subplots(figsize=(16, 8))  # БЫЛО (12,5)
+        self.ax.set_xlim(0, 14)
+        self.ax.set_ylim(-4, 3)        # БЫЛО (-1.5, 3)
+        self.ax.axis('off')
+
+        self.pipe_color = '#616a6b'
+        self.tank_body_color = '#ecf0f1'
+        self.tank_edge_color = '#34495e'
+        self.water_color     = '#3498db'
+
+    def draw_reservoirs(self, h):
+        for i, (x, y) in enumerate(reservoir_pos):
+            w = 1.0
+            h_full = 2.0
+            # Корпус
+            self.ax.add_patch(Rectangle(
+                (x - w/2, y), w, h_full,
+                facecolor=self.tank_body_color,
+                edgecolor=self.tank_edge_color,
+                linewidth=1.5, zorder=2
+            ))
+            # Уровень воды
+            water_level = max(0, min(h[i], h_full))
+            self.ax.add_patch(Rectangle(
+                (x - w/2, y), w, water_level,
+                facecolor=self.water_color,
+                edgecolor='none',
+                alpha=0.7,
+                zorder=3
+            ))
+            # Подпись
+            self.ax.text(
+                x, y + h_full + 0.15,
+                f"Резервуар {i+1}",
+                ha='center', va='bottom',
+                fontsize=9, color='#2c3e50', weight='bold'
+            )
+
+    def draw_pipes(self, flows):
+        for k, conn in enumerate(connections):
+            i, j = conn['i'], conn['j']
+            x1, y1 = reservoir_pos[i]
+            x2, y2 = reservoir_pos[j]
+            lw = conn['S'] * 10 + 0.5
+            self.ax.plot(
+                [x1, x2], [y1+1.0, y2+1.0],
+                color=self.pipe_color,
+                linewidth=lw,
+                alpha=0.8,
+                solid_capstyle='round',
+                zorder=1
+            )
+            flow = flows[k]
+            if abs(flow) > 1e-9:
+                mx = (x1 + x2)/2
+                my = (y1 + 1.0 + y2 + 1.0)/2
+                sign = np.sign(flow)
+                dx = (x2 - x1)*0.001*sign
+                dy = (y2 - y1)*0.001*sign
+                self.ax.annotate(
+                    '',
+                    xy=(mx + dx, my + dy),
+                    xytext=(mx - dx, my - dy),
+                    arrowprops=dict(
+                        arrowstyle='->',
+                        color='#2c3e50',
+                        lw=2,
+                        shrinkA=5,
+                        shrinkB=5
+                    ),
+                    zorder=4
+                )
+
+    def add_info_panel(self, P, h):
+        text = "Параметры системы\n\n"
+        for i in range(len(P)):
+            text += (
+                f"[Резервуар {i+1}]\n"
+                f"  Давление: {P[i]/1000:.1f} кПа\n"
+                f"  Уровень:  {h[i]:.2f} м\n"
+                f"  Объём:    {reservoirs[i]['S']*h[i]:.1f} м³\n\n"
+            )
+        self.ax.text(
+            0.02, 0.96, text,
+            transform=self.ax.transAxes,
+            ha='left', va='top',
+            fontsize=9,
+            fontfamily='monospace',
+            bbox=dict(
+                facecolor='white',
+                alpha=0.8,
+                boxstyle='round,pad=0.5',
+                edgecolor='#95a5a6'
+            ),
+            zorder=10
+        )
+
+    def set_title(self, t):
+        self.ax.set_title(
+            f"Гидравлическая система: состояние на шаге t={t:.1f} с",
+            fontsize=12,
+            pad=25,
+            color='#2c3e50',
+            weight='bold'
+        )
+
+# ------------------ РАСЧЁТ (логика без изменений) ------------------
+def calculate_flows(P):
+    flows = []
+    for conn in connections:
+        i, j, S = conn['i'], conn['j'], conn['S']
+        dP = P[i] - P[j]
+        if abs(dP) < 1e-9:
+            flow = 0
+        else:
+            flow = np.sign(dP) * S * np.sqrt(2 * abs(dP)/rho)
+        flows.append(flow)
+    return flows
+
+# ------------------ СИМУЛЯЦИЯ ------------------
+P = np.array([r['P0'] for r in reservoirs])
+h = P/(rho*g)
+history = []
+n_steps = 3
+
+for step in range(n_steps):
+    flows = calculate_flows(P)
+    history.append((P.copy(), h.copy(), flows.copy()))
+
+    dP = np.zeros_like(P)
+    for k, conn in enumerate(connections):
+        i, j = conn['i'], conn['j']
+        dP[i] -= flows[k] * rho*g / reservoirs[i]['S']
+        dP[j] += flows[k] * rho*g / reservoirs[j]['S']
+
+    P += dP * dt
+    P = np.clip(P, 0, None)
+    h = P/(rho*g)
+
+# ------------------ ВИЗУАЛИЗАЦИЯ ------------------
+for i, (P_iter, h_iter, flows_iter) in enumerate(history):
+    vis = HydraulicVisualizer()
+    vis.draw_reservoirs(h_iter)
+    vis.draw_pipes(flows_iter)
+    vis.add_info_panel(P_iter, h_iter)
+    vis.set_title(i * dt)
+
+    plt.tight_layout()
+    plt.show()
