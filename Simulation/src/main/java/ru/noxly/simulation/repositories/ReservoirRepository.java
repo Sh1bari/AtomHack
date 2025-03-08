@@ -23,7 +23,4 @@ public interface ReservoirRepository extends BaseJpaRepository<Reservoir, Long> 
         WHERE (r.id % 10 + 1) = s.key;
         """, nativeQuery = true)
     void updatePressure(@Param("keys") Long[] keys, @Param("pressures") Double[] pressures);
-
-
-
 }
