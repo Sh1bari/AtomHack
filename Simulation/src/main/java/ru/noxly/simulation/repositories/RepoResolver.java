@@ -23,12 +23,14 @@ public class RepoResolver {
     private final PipeRepository pipeRepository;
     private final ReservoirRepository reservoirRepository;
     private final SpaceRepository spaceRepository;
+    private final SchedulerRepository schedulerRepository;
 
     @PostConstruct
     private void init() {
         resolver.put(Pipe.class, pipeRepository);
         resolver.put(Reservoir.class, reservoirRepository);
         resolver.put(Space.class, spaceRepository);
+        resolver.put(SchedulerRepository.class, schedulerRepository);
     }
 
     private final Map<Class<?>, JpaRepository<?, ?>> resolver = new HashMap<>();

@@ -8,14 +8,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableJpaRepositories
 @SpringBootApplication(scanBasePackages = {
-		"ru.noxly.simulation",    // Пакет вашего приложения"
-		"ru.sh1bari.resolver",    // Пакет библиотеки
-		"ru.noxly.validation",    // Пакет библиотеки
+        "ru.noxly.simulation",    // Пакет вашего приложения"
+        "ru.sh1bari.resolver",    // Пакет библиотеки
+        "ru.noxly.validation",    // Пакет библиотеки
 })
 public class SimulationApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(SimulationApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SimulationApplication.class, args);
+    }
 
 }
