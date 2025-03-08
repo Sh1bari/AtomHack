@@ -35,8 +35,8 @@ public class PressureIntegrationService {
         List<Long> keysList = new ArrayList<>(pressureMap.keySet());
         List<Double> pressureSet = new ArrayList<>(pressureMap.values());
         repoResolver.getReservoirRepository().updatePressure(
-                keysList.toArray(new Long[0]),
-                pressureSet.toArray(new Double[0])
+                keysList.toArray(new Long[11]),
+                pressureSet.toArray(new Double[11])
         );
     }
 
