@@ -85,7 +85,7 @@ services:
       - "traefik.http.routers.websocket.tls=true"
       - "traefik.http.routers.websocket.tls.certresolver=myresolver"
       - "traefik.http.services.websocket.loadbalancer.server.port=8082"
-      - "traefik.http.routers.websocket.priority=31"
+      - "traefik.http.routers.websocket.priority=30"
 
         # WebSocket Middleware (только для /api/ws)
       - "traefik.http.middlewares.websocket-headers.headers.customrequestheaders.Connection=Upgrade"
@@ -98,7 +98,7 @@ services:
       - "traefik.http.routers.api-socket.tls=true"
       - "traefik.http.routers.api-socket.tls.certresolver=myresolver"
       - "traefik.http.services.api-socket.loadbalancer.server.port=8082"
-      - "traefik.http.routers.api-socket.priority=30"
+      - "traefik.http.routers.api-socket.priority=31"
 
 networks:
   traefik_network:
