@@ -1,5 +1,7 @@
 docker build -t registry.sh1bari.ru/atom/simulation:1.0.0 ./Simulation
+docker build -t registry.sh1bari.ru/atom/socket:1.0.0 ./web-socket
 
 docker push registry.sh1bari.ru/atom/simulation:1.0.0
+docker push registry.sh1bari.ru/atom/socket:1.0.0
 
 
