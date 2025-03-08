@@ -93,7 +93,7 @@ services:
       - "traefik.http.routers.websocket.middlewares=websocket-headers"
 
         # ---------- Обычные HTTPS-запросы (/api/*) ----------
-      - "traefik.http.routers.api-socket.rule=Host(`ws.hack.noxly.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api-socket.rule=Host(`ws.hack.noxly.ru`) && PathPrefix(`/api/ws/info`)"
       - "traefik.http.routers.api-socket.entrypoints=websecure"
       - "traefik.http.routers.api-socket.tls=true"
       - "traefik.http.routers.api-socket.tls.certresolver=myresolver"
