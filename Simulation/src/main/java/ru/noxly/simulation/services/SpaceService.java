@@ -11,6 +11,7 @@ import ru.noxly.simulation.models.models.requests.SpaceCreateDtoReq;
 import ru.noxly.simulation.models.models.requests.SpaceUpdateDtoReq;
 import ru.noxly.simulation.repositories.RepoResolver;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -33,6 +34,7 @@ public class SpaceService {
 	public Space createSpace(final SpaceCreateDtoReq request) {
 		val space = Space.init()
 				.setName(request.getName())
+				.setCreateDate(OffsetDateTime.now())
 				.build();
 		repoResolver.resolve(Space.class).save(space);
 

@@ -10,8 +10,8 @@ public class ReservoirIdUtil {
 	 * @param id идентификатор резервуара, не должен быть null
 	 * @return остаток от деления {@code id} на 10 или {@code null}, если {@code id} равно null
 	 */
-	public static Long resolveReservoirId(final Long id) {
-		return (id != null) ? id % 10 : null;
+	public static Long resolveReservoirId(@NonNull final Long id) {
+		return (id % 10) + 1;
 	}
 
 }

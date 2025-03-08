@@ -34,7 +34,10 @@ public class PressureIntegrationService {
     private void saveToPostgres(Map<Long, Double> pressureMap) {
         List<Long> keysList = new ArrayList<>(pressureMap.keySet());
         List<Double> pressureSet = new ArrayList<>(pressureMap.values());
-        repoResolver.getReservoirRepository().updatePressure(keysList, pressureSet);
+        repoResolver.getReservoirRepository().updatePressure(
+                keysList.toArray(new Long[0]),
+                pressureSet.toArray(new Double[0])
+        );
     }
 
     private void saveToRedis(Map<Long, Double> pressureMap) {

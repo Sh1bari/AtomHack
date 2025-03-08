@@ -14,12 +14,16 @@ public interface ReservoirRepository extends BaseJpaRepository<Reservoir, Long> 
     @Modifying
     @Transactional
     @Query(value = """
-            UPDATE reservoirs r
-            SET pressure = s.pressure
-            FROM (
-                SELECT UNNEST(:keys) AS key, UNNEST(:pressures) AS pressure
-            ) AS s
-            WHERE (r.id %% 10 + 1) = s.key;
-            """, nativeQuery = true)
-    void updatePressure(@Param("keys") List<Long> keys, @Param("pressures") List<Double> pressures);
+        UPDATE reservoirs r
+        SET pressure = s.pressure
+        FROM (
+            SELECT UNNEST(CAST(:keys AS bigint[])) AS key,
+                   UNNEST(CAST(:pressures AS double precision[])) AS pressure
+        ) AS s
+        WHERE (r.id % 10 + 1) = s.key;
+        """, nativeQuery = true)
+    void updatePressure(@Param("keys") Long[] keys, @Param("pressures") Double[] pressures);
+
+
+
 }

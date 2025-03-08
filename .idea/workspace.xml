@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="Подключение редис паб саб + веб сокет сервер">
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/webClients/dyndns/DyndnsWebClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/webClients/dyndns/DyndnsWebClient.java" afterDir="false" />
+    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="Добавил Url">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/repositories/ReservoirRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/repositories/ReservoirRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/PressureIntegrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/PressureIntegrationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/SpaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/SpaceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/utils/ReservoirIdUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/utils/ReservoirIdUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +156,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1741376905725</updated>
-      <workItem from="1741376906742" duration="17701000" />
+      <workItem from="1741376906742" duration="19186000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -266,7 +270,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741394529338</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Добавил Url">
+      <option name="closed" value="true" />
+      <created>1741394738822</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1741394738822</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -288,6 +300,7 @@
     <MESSAGE value="compose" />
     <MESSAGE value="Подключение редис" />
     <MESSAGE value="Подключение редис паб саб + веб сокет сервер" />
-    <option name="LAST_COMMIT_MESSAGE" value="Подключение редис паб саб + веб сокет сервер" />
+    <MESSAGE value="Добавил Url" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил Url" />
   </component>
 </project>
