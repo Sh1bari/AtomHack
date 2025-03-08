@@ -86,12 +86,6 @@
 
         <!--Libs-->
         <dependency>
-            <groupId>ru.sh1bari</groupId>
-            <artifactId>resolver</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>ru.noxly</groupId>
             <artifactId>validation</artifactId>
             <version>1.0.0</version>

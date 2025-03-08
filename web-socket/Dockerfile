@@ -8,7 +8,6 @@ WORKDIR /build
 COPY pom.xml pom.xml
 COPY libs libs
 
-RUN mvn install:install-file -Dfile=libs/resolver-1.0.0.jar -DgroupId=ru.sh1bari -DartifactId=resolver -Dversion=1.0.0 -Dpackaging=jar
 RUN mvn install:install-file -Dfile=libs/validation-1.0.0.jar -DgroupId=ru.noxly -DartifactId=validation -Dversion=1.0.0 -Dpackaging=jar
 
 # Скачивание зависимостей и сохранение их в отдельном слое

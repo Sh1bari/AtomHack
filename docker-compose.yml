@@ -82,7 +82,7 @@ services:
       - "traefik.http.routers.socket.tls=true"
       - "traefik.http.routers.socket.tls.certresolver=myresolver"
       - "traefik.http.services.socket.loadbalancer.server.port=8082"
-      - "traefik.http.routers.socket.priority=25"
+      - "traefik.http.routers.socket.priority=26"
       - "traefik.docker.network=traefik_network"
       - "traefik.http.middlewares.websocket-headers.headers.customrequestheaders.Connection=Upgrade"
       - "traefik.http.middlewares.websocket-headers.headers.customrequestheaders.Upgrade=websocket"
