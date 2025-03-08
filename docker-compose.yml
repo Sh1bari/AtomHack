@@ -81,7 +81,7 @@ services:
       - "traefik.enable=true"
       # ---------- WebSocket (апгрейд для /api/ws) ----------
       - "traefik.docker.network=traefik_network"
-      - "traefik.http.routers.websocket.rule=Host(`ws.hack.noxly.ru`) && Path(`/api/ws`)"
+      - "traefik.http.routers.websocket.rule=Host(`ws.hack.noxly.ru`) && PathPrefix(`/api/ws`)"
       - "traefik.http.routers.websocket.entrypoints=websecure"
       - "traefik.http.routers.websocket.tls=true"
       - "traefik.http.routers.websocket.tls.certresolver=myresolver"
