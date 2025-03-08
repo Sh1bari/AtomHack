@@ -11,10 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.noxly.simulation.models.models.dtos.ReservoirDto;
 import ru.noxly.simulation.models.models.dtos.SpaceByIdDto;
 import ru.noxly.simulation.models.models.dtos.SpaceDto;
 import ru.noxly.simulation.models.models.requests.SpaceCreateDtoReq;
 import ru.noxly.simulation.models.models.requests.SpaceUpdateDtoReq;
+import ru.noxly.simulation.redis.ReservoirPublisher;
 import ru.noxly.simulation.services.SpaceService;
 
 import java.util.List;
@@ -81,5 +83,25 @@ public class SpaceController {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(response);
+	}
+
+	private final ReservoirPublisher reservoirPublisher;
+	@Operation(summary = "test")
+	@ApiResponses()
+	@GetMapping("/test")
+	public ResponseEntity<?> test(@RequestParam Long spaceId, @RequestParam Double pressure) {
+		reservoirPublisher.publishUpdate(
+				ReservoirDto.init()
+						.setSpaceId(spaceId)
+						.setId(1L)
+						.setPressure(pressure)
+						.setLevel(5D)
+						.setArea(5D)
+				.build()
+		);
+
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body("gotovo");
 	}
 }

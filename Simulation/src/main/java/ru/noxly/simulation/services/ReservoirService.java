@@ -21,6 +21,7 @@ public class ReservoirService {
         val reservoir = Reservoir.init()
                 .setArea(request.getArea())
                 .setSpace(space)
+                .setPressure(5.0)
                 .setLevel(5.0)
                 .build();
         repoResolver.resolve(Reservoir.class).save(reservoir);
