@@ -69,6 +69,8 @@ services:
         constraints:
           - "node.labels.region == ru"  # Запускаем только на RU сервере
     image: registry.sh1bari.ru/atom/socket:1.0.0
+    ports:
+      - "8082:8082"
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
