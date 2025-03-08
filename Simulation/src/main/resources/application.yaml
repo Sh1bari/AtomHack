@@ -42,7 +42,7 @@ management:
       show-details: always
 services:
   dyndns:
-    url: ${DYNDNS_SERVER_URL:http://localhost:8081}
+    url: ${DYNDNS_SERVER_URL:https://yand.dyndns.org}
     timeOut: ${DYNDNS_SERVER_TIMEOUT:3000} #in millis
 redis:
   host: ${REDIS_HOST:localhost}       # Адрес Redis-сервера

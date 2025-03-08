@@ -28,7 +28,7 @@ public class DyndnsWebClient {
     @Qualifier(WEB_CLIENT_DYNDNS_BEAN)
     private WebClient webClient;
 
-    @Value("${services.auth.url}")
+    @Value("${services.dyndns.url}")
     private String baseUrl;
 
     /**

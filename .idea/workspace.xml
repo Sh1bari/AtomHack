@@ -4,20 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="Подключение редис">
-      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/redis/ReservoirPublisher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/common/Constant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/configs/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/configs/WebSocketConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/models/ReservoirDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/redis/ReservoirSubscriber.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/services/SocketMessageSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/configs/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/configs/RedisConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/SpaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/SpaceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-socket/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web-socket/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-socket/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/web-socket/src/main/resources/application.yaml" afterDir="false" />
+    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="Подключение редис паб саб + веб сокет сервер">
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/webClients/dyndns/DyndnsWebClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/webClients/dyndns/DyndnsWebClient.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +128,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.WebSocketApplication">
+  <component name="RunManager" selected="Spring Boot.SimulationApplication">
     <configuration name="SimulationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Simulation" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.noxly.simulation.SimulationApplication" />
@@ -164,7 +152,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1741376905725</updated>
-      <workItem from="1741376906742" duration="17386000" />
+      <workItem from="1741376906742" duration="17701000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -270,7 +258,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741387992942</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Подключение редис паб саб + веб сокет сервер">
+      <option name="closed" value="true" />
+      <created>1741394529338</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1741394529338</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -291,6 +287,7 @@
     <MESSAGE value="Init" />
     <MESSAGE value="compose" />
     <MESSAGE value="Подключение редис" />
-    <option name="LAST_COMMIT_MESSAGE" value="Подключение редис" />
+    <MESSAGE value="Подключение редис паб саб + веб сокет сервер" />
+    <option name="LAST_COMMIT_MESSAGE" value="Подключение редис паб саб + веб сокет сервер" />
   </component>
 </project>
