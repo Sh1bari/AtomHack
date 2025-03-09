@@ -11,5 +11,7 @@ public class ReservoirCreateDtoReq {
 
     private final Double area;
 
+    private final Double startLevel;
+
     private final Long spaceId;
 }

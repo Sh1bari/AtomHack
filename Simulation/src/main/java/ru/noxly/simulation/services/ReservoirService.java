@@ -22,7 +22,7 @@ public class ReservoirService {
                 .setArea(request.getArea())
                 .setSpace(space)
                 .setPressure(5.0)
-                .setLevel(5.0)
+                .setLevel(request.getStartLevel())
                 .build();
         repoResolver.resolve(Reservoir.class).save(reservoir);
 
