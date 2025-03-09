@@ -1,158 +1,268 @@
 package ru.noxly.simulation.services;
 
-import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.noxly.simulation.models.entities.*;
+import ru.noxly.simulation.models.entities.Pipe;
+import ru.noxly.simulation.models.entities.Reservoir;
+import ru.noxly.simulation.models.entities.Space;
+import ru.noxly.simulation.models.models.dtos.ReservoirDto;
+import ru.noxly.simulation.redis.ReservoirPublisher;
+import ru.noxly.simulation.repositories.RepoResolver;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class HydraulicService {
-    private static final double G = 9.81;
-    private static final double RHO = 1000;
-    private static final double DT = 0.5;
-    private static final int ITERATIONS = 3;
 
-    private final List<Reservoir> reservoirs = new ArrayList<>();
-    private final List<Pipe> pipes = new ArrayList<>();
+    // --------------- КОНСТАНТЫ ---------------
+    private static final double G = 9.81;       // м/с²
+    private static final double RHO = 1000;       // кг/м³
 
-    public void initMockData() {
-        // Инициализация резервуаров
-        double[] areas = {1.0, 1.5, 2.0, 0.8, 1.2};
-        double[] pressures = {
-                RHO*G*5.0,
-                RHO*G*3.0,
-                RHO*G*2.0,
-                RHO*G*4.0,
-                RHO*G*1.0
-        };
+    private static final double DT = 0.1;        // шаг по времени (с)
+    private static final int N_STEPS = 5;     // число итераций за один запуск
 
-        for (int i = 0; i < 5; i++) {
-            Reservoir r = Reservoir.init()
-                    .setArea(areas[i])
-                    .setPressure(pressures[i])
-                    .setLevel(pressures[i] / (RHO * G))
-                    .build();
-            reservoirs.add(r);
-        }
+    // "Предельная" высота резервуара (10 м)
+    private static final double MAX_LEVEL = 10.0;
 
-        // Инициализация труб
-        int[][] conns = {{0,1}, {1,2}, {2,3}, {3,4}, {0,3}, {1,4}};
-        double[] pipe_areas = {0.1, 0.2, 0.15, 0.05, 0.12, 0.18};
+    private final RepoResolver repoResolver;
+    private final ReservoirPublisher reservoirPublisher;
 
-        for (int i = 0; i < conns.length; i++) {
-            Pipe p = Pipe.init()
-                    .setSource(reservoirs.get(conns[i][0]))
-                    .setTarget(reservoirs.get(conns[i][1]))
-                    .setDiameter(2 * Math.sqrt(pipe_areas[i] / Math.PI))
-                    .build();
-            pipes.add(p);
-        }
-    }
-
-    @PostConstruct
+    /**
+     * Запускается каждые 5 секунд.
+     * Выполняет N_STEPS итераций гидравлической модели.
+     */
+    @Scheduled(fixedRate = 5000)
     public void simulate() {
-        initMockData();
+        // 1) Читаем данные из БД и формируем Reservoir/pipe
+        SimulationData data = loadDataFromDB();
 
-        System.out.println("=== НАЧАЛЬНОЕ СОСТОЯНИЕ ===");
-        printResults();
+        // 2) Инициализируем массивы давлений/уровней
+        double[] P = new double[data.reservoirs.size()];
+        double[] h = new double[data.reservoirs.size()];
+        initPressuresAndLevels(data, P, h);
 
-        for (int iter = 0; iter < ITERATIONS; iter++) {
-            System.out.printf("\n=== ИТЕРАЦИЯ %d ===\n", iter+1);
+        // 4) Делаем N_STEPS итераций
+        for (int step = 0; step < N_STEPS; step++) {
+            // Выполняем один шаг (flows, обновляем P,h)
+            doOneStepOfSimulation(data, P, h);
+            printAndPublish(P, h, data.reservoirs);
+        }
 
-            Map<Pipe, Double> flows = calculateFlows();
-            printFlows(flows);
+        // 5) Сохраняем финальные результаты в БД
+        saveResults(data.reservoirs, P, h);
+    }
 
-            updatePressures(flows);
+    // ------------------------------------------------
+    // 1) ЧТЕНИЕ ДАННЫХ ИЗ БД
+    // ------------------------------------------------
+    private SimulationData loadDataFromDB() {
+        // Берём Space (первый найденный)
+        val space = repoResolver.resolve(Space.class)
+                .findAll(Specification.where(null))
+                .get(0);
 
-            System.out.println("\nПосле обновления:");
-            printResults();
+        // Извлекаем резервуары
+        List<Reservoir> resList = space.getReservoirs().stream()
+                // Переводим pressure из кПа в Па
+                .map(r -> r.toBuilder()
+                        .setPressure(r.getPressure() * 1000.0)
+                        .build()
+                )
+                .toList();
+        List<Reservoir> reservoirs = new ArrayList<>(resList);
+
+        // Извлекаем трубы, убирая дубликаты
+        List<Pipe> pipes = reservoirs.stream()
+                .map(Reservoir::getOutgoingPipes)
+                .flatMap(List::stream)
+                .distinct()
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return new SimulationData(reservoirs, pipes);
+    }
+
+    // ------------------------------------------------
+    // 2) ИНИЦИАЛИЗАЦИЯ (давление, уровень)
+    // ------------------------------------------------
+    private void initPressuresAndLevels(SimulationData data, double[] P, double[] h) {
+        for (int i = 0; i < data.reservoirs.size(); i++) {
+            Reservoir r = data.reservoirs.get(i);
+            // P[i] = избыточное газовое давление (Па)
+            P[i] = r.getPressure();
+            // h[i] = уровень воды (м)
+            double level = r.getLevel();
+            // Ограничиваем если нужно
+            if (level > MAX_LEVEL) level = MAX_LEVEL;
+            h[i] = level;
         }
     }
 
-    private Map<Pipe, Double> calculateFlows() {
-        Map<Pipe, Double> flows = new HashMap<>();
-        for (Pipe pipe : pipes) {
-            double p1 = pipe.getSource().getPressure();
-            double p2 = pipe.getTarget().getPressure();
-            double dp = p1 - p2;
-            double radius = pipe.getDiameter() / 2;
-            double s = Math.PI * radius * radius;
+    // ------------------------------------------------
+    // 3) ОДИН ШАГ РАСЧЁТА
+    // ------------------------------------------------
+    private void doOneStepOfSimulation(SimulationData data, double[] P, double[] h) {
+        // 3.1) Считаем расходы
+        double[] flows = calculateFlows(data, P, h);
 
-            double flow = 0;
-            if (dp != 0) {
-                flow = s * Math.signum(dp) * Math.sqrt(2 * Math.abs(dp)/RHO);
-            }
-            flows.put(pipe, flow);
+        // 3.2) Массив для приращений dP
+        double[] dP = new double[data.reservoirs.size()];
+        Arrays.fill(dP, 0.0);
+
+        // 3.3) Обновляем dP и уровни
+        for (int k = 0; k < data.pipes.size(); k++) {
+            Pipe pipe = data.pipes.get(k);
+
+            int iSrc = data.indexMap.get(pipe.getSource());
+            int iDst = data.indexMap.get(pipe.getTarget());
+
+            double flow = flows[k]; // м³/с
+
+            double areaSrc = data.reservoirs.get(iSrc).getArea();
+            double areaDst = data.reservoirs.get(iDst).getArea();
+
+            // dP[iSrc] -= ...
+            dP[iSrc] -= flow * RHO * G / areaSrc;
+            dP[iDst] += flow * RHO * G / areaDst;
+
+            // Перенос воды
+            double dVolume = flow * DT;
+            h[iSrc] -= dVolume / areaSrc;
+            h[iDst] += dVolume / areaDst;
+
+            // Ограничения [0..MAX_LEVEL]
+            if (h[iSrc] < 0) h[iSrc] = 0;
+            if (h[iDst] > MAX_LEVEL) h[iDst] = MAX_LEVEL;
         }
+
+        // 3.4) Применяем dP к P
+        for (int i = 0; i < P.length; i++) {
+            P[i] += dP[i] * DT;
+            if (P[i] < 0) P[i] = 0;
+        }
+
+        // При желании можем печатать состояние на каждом (!) подшаге:
+        // printAndPublish(P, h, data.reservoirs);
+    }
+
+    // ------------------------------------------------
+    // 4) РАСЧЁТ РАСХОДОВ (газ + гидростатика)
+    // ------------------------------------------------
+    private double[] calculateFlows(SimulationData data, double[] P, double[] h) {
+        double[] flows = new double[data.pipes.size()];
+
+        for (int k = 0; k < data.pipes.size(); k++) {
+            Pipe pipe = data.pipes.get(k);
+
+            int iSrc = data.indexMap.get(pipe.getSource());
+            int iDst = data.indexMap.get(pipe.getTarget());
+
+            // Общее давление
+            double totalSrc = P[iSrc] + RHO * G * h[iSrc];
+            double totalDst = P[iDst] + RHO * G * h[iDst];
+
+            double dp = totalSrc - totalDst; // Па
+
+            double flow = 0.0;
+            if (Math.abs(dp) > 1e-9) {
+                double diam = pipe.getDiameter();
+                double crossSection = Math.PI * Math.pow(diam / 2.0, 2);
+
+                flow = Math.signum(dp)
+                        * crossSection
+                        * Math.sqrt(2.0 * Math.abs(dp) / RHO);
+            }
+            flows[k] = flow;
+        }
+
         return flows;
     }
 
-    private void printFlows(Map<Pipe, Double> flows) {
-        System.out.println("\nТекущие потоки:");
-        System.out.printf("%-15s %-10s %-10s %-12s%n",
-                "Труба", "Источник", "Приемник", "Расход (м³/с)");
+    // ------------------------------------------------
+    // 5) СОХРАНЕНИЕ РЕЗУЛЬТАТОВ
+    // ------------------------------------------------
+    private void saveResults(List<Reservoir> reservoirs, double[] P, double[] h) {
+        val reservoirRepo = repoResolver.resolve(Reservoir.class);
 
-        flows.forEach((pipe, flow) -> {
-            int src = reservoirs.indexOf(pipe.getSource());
-            int dest = reservoirs.indexOf(pipe.getTarget());
-            System.out.printf("Труба %d->%d     %-10d %-10d %-12.4f%n",
-                    src, dest, src, dest, flow);
-        });
+        for (int i = 0; i < reservoirs.size(); i++) {
+            double newPressKPa = P[i] / 1000.0;
+            double newLevel = h[i];
+
+            Reservoir old = reservoirs.get(i);
+            Reservoir upd = old.toBuilder()
+                    .setPressure(newPressKPa) // кПа
+                    .setLevel(newLevel)       // м
+                    .build();
+            reservoirs.set(i, upd);
+        }
+
+        // Можно сохранить по одному, либо saveAll:
+        reservoirs.forEach(reservoirRepo::save);
     }
 
-    private void updatePressures(Map<Pipe, Double> flows) {
-        // Создаем карту для отслеживания новых версий резервуаров
-        Map<Reservoir, Reservoir> updatedReservoirs = new HashMap<>();
+    // ------------------------------------------------
+    // 6) ВЫВОД/ПУБЛИКАЦИЯ
+    // ------------------------------------------------
+    private List<ReservoirDto> printAndPublish(
+            double[] P,
+            double[] h,
+            List<Reservoir> reservoirs
+    ) {
+        List<ReservoirDto> dtos = new ArrayList<>();
+        // При желании, вывести консольный заголовок
+        // System.out.println("=== Current state ===");
 
-        // Рассчитываем изменения давления
-        Map<Reservoir, Double> pressureDeltas = new HashMap<>();
-        reservoirs.forEach(r -> pressureDeltas.put(r, 0.0));
+        for (int i = 0; i < P.length; i++) {
+            double gas_kPa = P[i] / 1000.0;
+            double lvl = Math.max(h[i], 0.0);
+            double area = reservoirs.get(i).getArea();
 
-        flows.forEach((pipe, flow) -> {
-            Reservoir src = pipe.getSource();
-            Reservoir dest = pipe.getTarget();
+            // Формируем DTO
+            Long reservoirId = reservoirs.get(i).getId();
+            Long spaceId = reservoirs.get(i).getSpace().getId();
 
-            double delta = flow * DT * RHO * G;
-            pressureDeltas.put(src, pressureDeltas.get(src) - delta / src.getArea());
-            pressureDeltas.put(dest, pressureDeltas.get(dest) + delta / dest.getArea());
-        });
-
-        // Создаем новые объекты резервуаров
-        pressureDeltas.forEach((oldRes, delta) -> {
-            double newPressure = oldRes.getPressure() + delta;
-            Reservoir newRes = oldRes.toBuilder()
-                    .setPressure(newPressure)
-                    .setLevel(newPressure / (RHO * G))
+            ReservoirDto dto = ReservoirDto.init()
+                    .setId(reservoirId)
+                    .setSpaceId(spaceId)
+                    .setPressure(gas_kPa)
+                    .setLevel(lvl)
+                    .setArea(area)
                     .build();
-            updatedReservoirs.put(oldRes, newRes);
-        });
 
-        // Обновляем список резервуаров
-        reservoirs.replaceAll(r -> updatedReservoirs.getOrDefault(r, r));
+            // Публикуем
+            reservoirPublisher.publishUpdate(dto);
 
-        // Обновляем связи в трубах
-        pipes.replaceAll(pipe -> {
-            Reservoir newSource = updatedReservoirs.getOrDefault(pipe.getSource(), pipe.getSource());
-            Reservoir newTarget = updatedReservoirs.getOrDefault(pipe.getTarget(), pipe.getTarget());
-            return pipe.toBuilder()
-                    .setSource(newSource)
-                    .setTarget(newTarget)
-                    .build();
-        });
+            dtos.add(dto);
+        }
+
+        // Если хотите консольный вывод - можно здесь выводить
+        // System.out.println(dtos);
+
+        return dtos;
     }
 
-    public void printResults() {
-        System.out.println("\nИтоговые параметры системы:");
-        System.out.printf("%-10s %-15s %-12s %-12s%n",
-                "Резервуар", "Давление (кПа)", "Уровень (м)", "Объём (м³)");
+    // ------------------------------------------------
+    // 7) ВСПОМОГАТЕЛЬНАЯ "МОДЕЛЬ" ДАННЫХ
+    // ------------------------------------------------
+    private static class SimulationData {
+        final List<Reservoir> reservoirs;
+        final List<Pipe> pipes;
+        final Map<Reservoir, Integer> indexMap;
 
-        for (Reservoir r : reservoirs) {
-            System.out.printf("%-10d %-15.2f %-12.2f %-12.2f%n",
-                    reservoirs.indexOf(r),
-                    r.getPressure() / 1000,
-                    r.getLevel(),
-                    r.getArea() * r.getLevel());
+        SimulationData(List<Reservoir> r, List<Pipe> p) {
+            this.reservoirs = r;
+            this.pipes = p;
+
+            Map<Reservoir, Integer> indexMap = new HashMap<>();
+            for (int i = 0; i < reservoirs.size(); i++) {
+                indexMap.put(reservoirs.get(i), i);
+            }
+
+            this.indexMap = indexMap;
         }
     }
 }

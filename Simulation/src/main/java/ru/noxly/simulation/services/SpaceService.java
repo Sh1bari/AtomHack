@@ -29,6 +29,10 @@ public class SpaceService {
 		return repoResolver.resolve(Space.class).findAll(Specification.where(null));
 	}
 
+	public Page<Space> findAll(Specification<Space> spec, Pageable pageable) {
+		return repoResolver.resolve(Space.class).findAll(spec, pageable);
+	}
+
 	@Transactional
 	public Space createSpace(final SpaceCreateDtoReq request) {
 		val space = Space.init()
@@ -49,9 +53,5 @@ public class SpaceService {
 		repoResolver.resolve(Space.class).save(entity);
 
 		return entity;
-	}
-
-	public Page<Space> findByPatternAndPageable(Specification<Space> spec, Pageable pageable) {
-		return repoResolver.resolve(Space.class).findAll(spec, pageable);
 	}
 }

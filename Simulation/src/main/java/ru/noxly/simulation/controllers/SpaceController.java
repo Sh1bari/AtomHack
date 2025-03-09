@@ -45,7 +45,7 @@ public class SpaceController {
 	public ResponseEntity<Page<SpaceDto>> findAll(@RequestParam(required = false) String pattern,
 												  @PageableDefault Pageable pageable) {
 		val spec = Specification.where(SpaceSpecification.hasName(pattern));
-		val spaces = spaceService.findByPatternAndPageable(spec, pageable);
+		val spaces = spaceService.findAll(spec, pageable);
 		val response = spaces.map(space -> conversionService.convert(space, SpaceDto.class));
 
 		return ResponseEntity

@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="композ" />
+    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="композ">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/SpaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/SpaceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/entities/Reservoir.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/entities/Reservoir.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/models/requests/ReservoirUpdateDtoReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/models/requests/ReservoirUpdateDtoReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/HydraulicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/HydraulicService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/SpaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/SpaceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/redis/ReservoirSubscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/redis/ReservoirSubscriber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/services/SocketMessageSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/services/SocketMessageSender.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -127,7 +137,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.WebSocketApplication">
+  <component name="RunManager" selected="Spring Boot.SimulationApplication">
     <configuration name="SimulationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Simulation" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.noxly.simulation.SimulationApplication" />
@@ -152,7 +162,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741376905725</updated>
       <workItem from="1741376906742" duration="21438000" />
-      <workItem from="1741449420183" duration="5135000" />
+      <workItem from="1741449420183" duration="20210000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -354,7 +364,39 @@
       <option name="project" value="LOCAL" />
       <updated>1741461884522</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741462198398</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1741462198398</updated>
+    </task>
+    <task id="LOCAL-00027" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741462428979</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1741462428979</updated>
+    </task>
+    <task id="LOCAL-00028" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741462638447</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1741462638447</updated>
+    </task>
+    <task id="LOCAL-00029" summary="композ">
+      <option name="closed" value="true" />
+      <created>1741463166928</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1741463166928</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

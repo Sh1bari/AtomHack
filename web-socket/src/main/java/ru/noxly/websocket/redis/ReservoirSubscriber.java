@@ -22,7 +22,7 @@ public class ReservoirSubscriber {
 		try {
 			ReservoirDto reservoirDto = objectMapper.readValue(message, ReservoirDto.class);
 			String spaceId = reservoirDto.getSpaceId().toString();
-			sender.sendReservoirInfo(reservoirDto);
+			sender.sendReservoirInfo(spaceId, reservoirDto);
 			log.info("🔔 Получено обновление для spaceId={} из канала {}: {}", spaceId, channel, reservoirDto);
 
 

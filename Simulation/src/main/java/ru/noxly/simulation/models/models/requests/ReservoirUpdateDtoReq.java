@@ -10,6 +10,4 @@ import lombok.*;
 public class ReservoirUpdateDtoReq {
 
     private final Double area;
-
-    private final Long spaceId;
 }

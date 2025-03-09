@@ -31,11 +31,9 @@ public class ReservoirService {
 
     @Transactional
     public Reservoir updateReservoir(String id, final ReservoirUpdateDtoReq request) {
-        val space = repoResolver.resolve(Space.class).findById(request.getSpaceId());
         val reservoir = repoResolver.resolve(Reservoir.class).findById(id);
         val entity = reservoir.toBuilder()
-                .setArea(reservoir.getArea())
-                .setSpace(space)
+                .setArea(request.getArea())
                 .build();
         repoResolver.resolve(Reservoir.class).save(entity);
 
