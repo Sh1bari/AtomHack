@@ -7,14 +7,18 @@ g = 9.81
 rho = 1000
 mu = 1.5e-3
 dt = 0.5
+n_steps = 3
 
-# УСТАНАВЛИВАЕМ НОВЫЕ НАЧАЛЬНЫЕ УРОВНИ (h0)
+# Считаем, что физически уровень может быть до 10 м:
+MAX_LEVEL = 10.0
+
+# Исходные данные
 reservoirs = [
-    {'S': 1.5, 'P0': 1.2 * rho * g},   # ~1.2 м
-    {'S': 2.0, 'P0': 0.7 * rho * g},   # ~0.7 м
-    {'S': 1.8, 'P0': 1.6 * rho * g},   # ~1.6 м
-    {'S': 1.2, 'P0': 1.0 * rho * g},   # ~1.0 м
-    {'S': 1.0, 'P0': 1.8 * rho * g},   # ~1.8 м
+    {'S': 1.5, 'P0': 1.2 * rho * g, 'h0': 9.2},  # начальный уровень = 1.2 м
+    {'S': 2.0, 'P0': 0.7 * rho * g, 'h0': 5.7},
+    {'S': 1.8, 'P0': 1.6 * rho * g, 'h0': 2.6},
+    {'S': 1.2, 'P0': 1.0 * rho * g, 'h0': 1.0},
+    {'S': 1.0, 'P0': 1.8 * rho * g, 'h0': 1.8},
 ]
 
 connections = [
@@ -26,7 +30,7 @@ connections = [
     {'i': 1, 'j': 4, 'S': 0.12}
 ]
 
-# РЕЗЕРВУАРЫ ПОНИЖЕ
+# Координаты для отображения
 reservoir_pos = np.array([
     [4,  0.0],
     [6, -3.0],
@@ -38,10 +42,9 @@ reservoir_pos = np.array([
 # ------------------ КЛАСС ВИЗУАЛИЗАЦИИ ------------------
 class HydraulicVisualizer:
     def __init__(self):
-        # УВЕЛИЧИВАЕМ ПОЛОТНО и ДИАПАЗОН ПО ОСИ Y
-        self.fig, self.ax = plt.subplots(figsize=(16, 8))  # БЫЛО (12,5)
+        self.fig, self.ax = plt.subplots(figsize=(16, 8))
         self.ax.set_xlim(0, 14)
-        self.ax.set_ylim(-4, 3)        # БЫЛО (-1.5, 3)
+        self.ax.set_ylim(-4, 3)
         self.ax.axis('off')
 
         self.pipe_color = '#616a6b'
@@ -50,20 +53,28 @@ class HydraulicVisualizer:
         self.water_color     = '#3498db'
 
     def draw_reservoirs(self, h):
+        """
+        Рисуем "резервуар" высотой 2 px, но уровень h[i] может быть до 10 м.
+        => Масштабируем: water_level_display = (h[i]/MAX_LEVEL)*2.
+        """
+        h_full_display = 2.0  # визуальная высота
         for i, (x, y) in enumerate(reservoir_pos):
             w = 1.0
-            h_full = 2.0
             # Корпус
             self.ax.add_patch(Rectangle(
-                (x - w/2, y), w, h_full,
+                (x - w/2, y), w, h_full_display,
                 facecolor=self.tank_body_color,
                 edgecolor=self.tank_edge_color,
                 linewidth=1.5, zorder=2
             ))
-            # Уровень воды
-            water_level = max(0, min(h[i], h_full))
+            # Переводим физический уровень (0..10) -> 0..2 для отображения
+            scaled = (h[i]/MAX_LEVEL) * h_full_display
+            # Не выходим за рамки [0..2]
+            scaled_display = max(0, min(scaled, h_full_display))
+
+            # Добавляем "воду" внутри
             self.ax.add_patch(Rectangle(
-                (x - w/2, y), w, water_level,
+                (x - w/2, y), w, scaled_display,
                 facecolor=self.water_color,
                 edgecolor='none',
                 alpha=0.7,
@@ -71,7 +82,7 @@ class HydraulicVisualizer:
             ))
             # Подпись
             self.ax.text(
-                x, y + h_full + 0.15,
+                x, y + h_full_display + 0.15,
                 f"Резервуар {i+1}",
                 ha='center', va='bottom',
                 fontsize=9, color='#2c3e50', weight='bold'
@@ -145,46 +156,74 @@ class HydraulicVisualizer:
             weight='bold'
         )
 
-# ------------------ РАСЧЁТ (логика без изменений) ------------------
-def calculate_flows(P):
+# --------------- ЛОГИКА С РАСЧЁТОМ (УЧЁТ ВОДЫ) ----------------
+def calculate_flows(P, h):
+    """
+    total[i] = P[i] + rho*g*h[i]
+    dP = total[i] - total[j]
+    flow = sign(dP)*S* sqrt(2*|dP|/rho)
+    """
     flows = []
-    for conn in connections:
-        i, j, S = conn['i'], conn['j'], conn['S']
-        dP = P[i] - P[j]
+    for c in connections:
+        i, j, S = c['i'], c['j'], c['S']
+        total_i = P[i] + rho*g*h[i]
+        total_j = P[j] + rho*g*h[j]
+        dP = total_i - total_j
         if abs(dP) < 1e-9:
-            flow = 0
+            flow = 0.0
         else:
-            flow = np.sign(dP) * S * np.sqrt(2 * abs(dP)/rho)
+            flow = np.sign(dP)*S*np.sqrt(2*abs(dP)/rho)
         flows.append(flow)
     return flows
 
-# ------------------ СИМУЛЯЦИЯ ------------------
-P = np.array([r['P0'] for r in reservoirs])
-h = P/(rho*g)
+# -------------- САМ "ШУРОВАТЕЛЬ" ------------------
+n = len(reservoirs)
+P = np.zeros(n)
+h = np.zeros(n)
+
+# Инициализируем газ.давление и уровень, без привязки "P= rho*g*h"
+for i, r in enumerate(reservoirs):
+    P[i] = r['P0']  # Па
+    h[i] = r['h0']  # метры
+    if h[i] > MAX_LEVEL:
+        h[i] = MAX_LEVEL
+
 history = []
-n_steps = 3
 
 for step in range(n_steps):
-    flows = calculate_flows(P)
+    flows = calculate_flows(P, h)
     history.append((P.copy(), h.copy(), flows.copy()))
 
     dP = np.zeros_like(P)
-    for k, conn in enumerate(connections):
-        i, j = conn['i'], conn['j']
-        dP[i] -= flows[k] * rho*g / reservoirs[i]['S']
-        dP[j] += flows[k] * rho*g / reservoirs[j]['S']
+    for k, c in enumerate(connections):
+        i, j, S = c['i'], c['j'], c['S']
+        flow = flows[k]
 
-    P += dP * dt
+        # Давление
+        dP[i] -= flow*rho*g / reservoirs[i]['S']
+        dP[j] += flow*rho*g / reservoirs[j]['S']
+
+        # Перенос воды
+        dV = flow*dt
+        h[i] -= dV/reservoirs[i]['S']
+        h[j] += dV/reservoirs[j]['S']
+
+        # Ограничиваем уровень
+        if h[i]<0: h[i]=0
+        if h[j]>MAX_LEVEL: h[j] = MAX_LEVEL
+
+    # Применяем dP, обнуляем негатив
+    P += dP*dt
     P = np.clip(P, 0, None)
-    h = P/(rho*g)
 
-# ------------------ ВИЗУАЛИЗАЦИЯ ------------------
+# ----- Визуализация -----
+import matplotlib.pyplot as plt
+
 for i, (P_iter, h_iter, flows_iter) in enumerate(history):
     vis = HydraulicVisualizer()
     vis.draw_reservoirs(h_iter)
     vis.draw_pipes(flows_iter)
     vis.add_info_panel(P_iter, h_iter)
-    vis.set_title(i * dt)
-
+    vis.set_title(i*dt)
     plt.tight_layout()
     plt.show()

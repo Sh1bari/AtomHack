@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import ru.noxly.simulation.models.models.dtos.ReservoirDto;
+import ru.noxly.simulation.models.models.socket.ReservoirUpdateSocketDto;
 
 @Service
 @RequiredArgsConstructor
@@ -13,14 +13,15 @@ public class ReservoirPublisher {
 
 	@Autowired
 	@Qualifier("pubSubRedisTemplate")
-	private RedisTemplate<String, ReservoirDto> redisTemplate;
+	private RedisTemplate<String, ReservoirUpdateSocketDto> redisTemplate;
 
-	public void publishUpdate(ReservoirDto reservoirDto) {
-		if (reservoirDto.getSpaceId() == null) {
+	public void publishUpdate(ReservoirUpdateSocketDto reservoirDto) {
+		val spaceId = reservoirDto.getReservoir().getSpaceId();
+		if (spaceId == null) {
 			throw new IllegalArgumentException("SpaceId не может быть null");
 		}
 
-		String channel = "reservoir-updates:" + reservoirDto.getSpaceId();
+		val channel = "reservoir-updates:" + spaceId;
 		redisTemplate.convertAndSend(channel, reservoirDto);
 	}
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import ru.noxly.simulation.models.entities.Scheduler;
 import ru.noxly.simulation.models.enums.SchedulerEnum;
 import ru.noxly.simulation.models.enums.SchedulerStatus;
 import ru.noxly.simulation.repositories.RepoResolver;
+import ru.noxly.simulation.services.simulation.HydraulicService;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -35,6 +37,7 @@ public class SchedulerService {
     private final TaskScheduler taskScheduler;
     private final ApplicationContext applicationContext;
     private final PressureIntegrationService pressureIntegrationService;
+    private final HydraulicService hydraulicService;
 
     private final Map<SchedulerEnum, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
@@ -150,6 +153,7 @@ public class SchedulerService {
     /**
      * Выполнение задачи с проверкой блокировки
      */
+    @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void executeTask(SchedulerEnum schedulerName) {
         try {
@@ -160,7 +164,6 @@ public class SchedulerService {
                     return;
                 }
 
-                HashSet<String> Aboba = new HashSet<>();
                 // Устанавливаем статус RUNNING
                 scheduler.setStatus(SchedulerStatus.RUNNING);
                 resolver.getSchedulerRepository().save(scheduler);
@@ -180,10 +183,10 @@ public class SchedulerService {
                 }
             });
         } catch (PessimisticLockException e) {
-            log.info("Не удалось захватить блокировку для задачи (таймаут): " + schedulerName);
+            //log.info("Не удалось захватить блокировку для задачи (таймаут): " + schedulerName);
             // Обработка: можно просто залогировать или предпринять другую логику (например, отложить задачу)
         } catch (Exception e) {
-            log.info("Общая ошибка при выполнении задачи " + schedulerName + ": " + e.getMessage());
+            //log.info("Общая ошибка при выполнении задачи " + schedulerName + ": " + e.getMessage());
         }
     }
 
@@ -195,6 +198,7 @@ public class SchedulerService {
         switch (scheduler.getName()) {
             case PRESSURE_VALUE_GETTER_POSTGRES -> runPressureValueUpdaterPostgres();
             case PRESSURE_VALUE_GETTER_REDIS -> runPressureValueUpdaterRedis();
+            case SIMULATE_PROCESS -> hydraulicService.simulate();
             default -> log.info("Неизвестная задача: " + scheduler.getName());
         }
     }

@@ -13,6 +13,7 @@ import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 import ru.noxly.simulation.models.models.dtos.ReservoirDto;
+import ru.noxly.simulation.models.models.socket.ReservoirUpdateSocketDto;
 
 import java.time.Duration;
 
@@ -59,8 +60,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, ReservoirDto> pubSubRedisTemplate(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
-        RedisTemplate<String, ReservoirDto> template = new RedisTemplate<>();
+    public RedisTemplate<String, ReservoirUpdateSocketDto> pubSubRedisTemplate(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
+        RedisTemplate<String, ReservoirUpdateSocketDto> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(ReservoirDto.class));
         return template;

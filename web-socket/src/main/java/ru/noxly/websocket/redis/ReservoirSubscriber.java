@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.noxly.websocket.models.ReservoirDto;
+import ru.noxly.websocket.models.socket.ReservoirUpdateSocketDto;
 import ru.noxly.websocket.services.SocketMessageSender;
 
 import java.io.IOException;
@@ -20,8 +21,8 @@ public class ReservoirSubscriber {
 
 	public void receiveMessage(String message, String channel) {
 		try {
-			ReservoirDto reservoirDto = objectMapper.readValue(message, ReservoirDto.class);
-			String spaceId = reservoirDto.getSpaceId().toString();
+			val reservoirDto = objectMapper.readValue(message, ReservoirUpdateSocketDto.class);
+			String spaceId = reservoirDto.getReservoir().getSpaceId().toString();
 			sender.sendReservoirInfo(spaceId, reservoirDto);
 			log.info("🔔 Получено обновление для spaceId={} из канала {}: {}", spaceId, channel, reservoirDto);
 

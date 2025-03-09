@@ -1,4 +1,5 @@
 INSERT INTO schedulers (name, type, fixed_delay, enabled)
 VALUES
     ('PRESSURE_VALUE_GETTER_POSTGRES', 'FIXED_DELAY', 50000, true),
-    ('PRESSURE_VALUE_GETTER_REDIS', 'FIXED_DELAY', 5000, true);
+    ('PRESSURE_VALUE_GETTER_REDIS', 'FIXED_DELAY', 5000, true),
+    ('SIMULATE_PROCESS', 'FIXED_DELAY', 1000, true);

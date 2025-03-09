@@ -4,16 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="композ">
+    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="Симуляция воды">
+      <change afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/simulation/SimulationProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/SpaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/controllers/SpaceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/entities/Reservoir.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/entities/Reservoir.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/models/requests/ReservoirUpdateDtoReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/models/requests/ReservoirUpdateDtoReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/HydraulicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/HydraulicService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/SpaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/SpaceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/redis/ReservoirSubscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/redis/ReservoirSubscriber.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/services/SocketMessageSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/web-socket/src/main/java/ru/noxly/websocket/services/SocketMessageSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/SimulationApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/SimulationApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/enums/SchedulerEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/models/enums/SchedulerEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/HydraulicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/simulation/HydraulicService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/PressureIntegrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/PressureIntegrationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirRedisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/ReservoirRedisService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/SchedulerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/java/ru/noxly/simulation/services/SchedulerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/resources/SimulationPython" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/resources/SimulationPython" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation/src/main/resources/db/migration/V3__add_pressure_value_getter_scheduler.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/src/main/resources/db/migration/V3__add_pressure_value_getter_scheduler.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +163,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741376905725</updated>
       <workItem from="1741376906742" duration="21438000" />
-      <workItem from="1741449420183" duration="20210000" />
+      <workItem from="1741449420183" duration="28507000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -396,7 +397,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741463166928</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Симуляция воды">
+      <option name="closed" value="true" />
+      <created>1741482058687</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1741482058687</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -423,6 +432,7 @@
     <MESSAGE value="Рефактор" />
     <MESSAGE value="Фикс findAll" />
     <MESSAGE value="композ" />
-    <option name="LAST_COMMIT_MESSAGE" value="композ" />
+    <MESSAGE value="Симуляция воды" />
+    <option name="LAST_COMMIT_MESSAGE" value="Симуляция воды" />
   </component>
 </project>

@@ -89,24 +89,4 @@ public class SpaceController {
 				.status(HttpStatus.OK)
 				.body(response);
 	}
-
-	private final ReservoirPublisher reservoirPublisher;
-	@Operation(summary = "test")
-	@ApiResponses()
-	@GetMapping("/test")
-	public ResponseEntity<?> test(@RequestParam Long spaceId, @RequestParam Double pressure) {
-		reservoirPublisher.publishUpdate(
-				ReservoirDto.init()
-						.setSpaceId(spaceId)
-						.setId(1L)
-						.setPressure(pressure)
-						.setLevel(5D)
-						.setArea(5D)
-				.build()
-		);
-
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body("gotovo");
-	}
 }

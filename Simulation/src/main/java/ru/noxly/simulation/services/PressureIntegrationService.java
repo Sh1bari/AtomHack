@@ -21,7 +21,7 @@ public class PressureIntegrationService {
 
     private final DynDnsClient dynDnsClient;
     private final RepoResolver repoResolver;
-    private final ReservoirRedisRepository reservoirRepository;
+    private final ReservoirRedisService reservoirRedisService;
 
     public void postgresUpdater() {
         Map<Long, Double> pressureMap = extractPressureList();
@@ -49,7 +49,7 @@ public class PressureIntegrationService {
                     .setId(key)
                     .setPressure(value)
                     .build();
-            reservoirRepository.save(reservoir);
+            reservoirRedisService.save(reservoir);
         });
     }
 
