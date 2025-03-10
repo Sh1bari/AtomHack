@@ -42,6 +42,7 @@ public class ReservoirController {
         val response = conversionService.convert(reservoir, ReservoirDto.class);
         reservoirPublisher.publishUpdate(
                 ReservoirUpdateSocketDto.init()
+                        .setSpaceId(reservoir.getSpace().getId())
                         .setCommand(SocketEntityEnum.CREATE)
                         .setReservoir(response)
                         .build()
@@ -73,6 +74,7 @@ public class ReservoirController {
         val response = conversionService.convert(reservoir, ReservoirDto.class);
         reservoirPublisher.publishUpdate(
                 ReservoirUpdateSocketDto.init()
+                        .setSpaceId(reservoir.getSpace().getId())
                         .setCommand(SocketEntityEnum.DELETE)
                         .setReservoir(response)
                         .build()

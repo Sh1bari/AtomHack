@@ -43,6 +43,7 @@ public class PipeController {
         pipePublisher.publishUpdate(
                 pipe.getSource().getSpace().getId(),
                 PipeUpdateSocketDto.init()
+                        .setSpaceId(pipe.getSource().getSpace().getId())
                         .setCommand(SocketEntityEnum.CREATE)
                         .setPipe(response)
                         .build()
@@ -75,6 +76,7 @@ public class PipeController {
         pipePublisher.publishUpdate(
                 pipe.getSource().getSpace().getId(),
                 PipeUpdateSocketDto.init()
+                        .setSpaceId(pipe.getSource().getSpace().getId())
                         .setCommand(SocketEntityEnum.DELETE)
                         .setPipe(response)
                         .build()
