@@ -10,6 +10,8 @@ import ru.noxly.websocket.models.PipeDto;
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
 public class PipeUpdateSocketDto {
 
+    private final Long spaceId;
+
     private final SocketEntityEnum command;
 
     private final PipeDto pipe;

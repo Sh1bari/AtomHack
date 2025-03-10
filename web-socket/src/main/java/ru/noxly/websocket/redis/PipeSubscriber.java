@@ -23,8 +23,8 @@ public class PipeSubscriber {
     public void receiveMessage(String message, String channel) {
         try {
             val pipeDto = objectMapper.readValue(message, PipeUpdateSocketDto.class);
-            String spaceId = channel.substring(channel.indexOf(":") + 1);
-            sender.sendPipeInfo(spaceId, pipeDto);
+            val spaceId = pipeDto.getSpaceId();
+            sender.sendPipeInfo(spaceId.toString(), pipeDto);
             log.info("🔔 Получено обновление для spaceId={} из канала {}: {}", spaceId, channel, pipeDto);
 
         } catch (IOException e) {

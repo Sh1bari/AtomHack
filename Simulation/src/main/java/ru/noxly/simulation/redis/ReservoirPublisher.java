@@ -16,7 +16,7 @@ public class ReservoirPublisher {
 	private RedisTemplate<String, ReservoirUpdateSocketDto> redisTemplate;
 
 	public void publishUpdate(ReservoirUpdateSocketDto reservoirDto) {
-		val spaceId = reservoirDto.getReservoir().getSpaceId();
+		val spaceId = reservoirDto.getSpaceId();
 		if (spaceId == null) {
 			throw new IllegalArgumentException("SpaceId не может быть null");
 		}

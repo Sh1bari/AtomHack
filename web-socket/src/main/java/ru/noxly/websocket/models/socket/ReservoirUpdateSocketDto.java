@@ -10,6 +10,8 @@ import ru.noxly.websocket.models.ReservoirDto;
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
 public class ReservoirUpdateSocketDto {
 
+	private final Long spaceId;
+
 	private final SocketEntityEnum command;
 
 	private final ReservoirDto reservoir;

@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="Новые события по вебсокету">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-    </list>
+    <list default="true" id="782d6b8d-ca41-4536-bc2d-cbb2b80b2e2a" name="Changes" comment="фронт в докер композ" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -165,7 +162,7 @@
       <workItem from="1741376906742" duration="21438000" />
       <workItem from="1741449420183" duration="28507000" />
       <workItem from="1741619807563" duration="69000" />
-      <workItem from="1741619883600" duration="4265000" />
+      <workItem from="1741619883600" duration="4652000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -415,7 +412,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741622933790</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="фронт в докер композ">
+      <option name="closed" value="true" />
+      <created>1741624302538</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1741624302538</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -444,6 +449,7 @@
     <MESSAGE value="композ" />
     <MESSAGE value="Симуляция воды" />
     <MESSAGE value="Новые события по вебсокету" />
-    <option name="LAST_COMMIT_MESSAGE" value="Новые события по вебсокету" />
+    <MESSAGE value="фронт в докер композ" />
+    <option name="LAST_COMMIT_MESSAGE" value="фронт в докер композ" />
   </component>
 </project>

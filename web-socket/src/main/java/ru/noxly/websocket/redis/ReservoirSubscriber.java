@@ -22,8 +22,8 @@ public class ReservoirSubscriber {
 	public void receiveMessage(String message, String channel) {
 		try {
 			val reservoirDto = objectMapper.readValue(message, ReservoirUpdateSocketDto.class);
-			String spaceId = channel.substring(channel.indexOf(":") + 1);
-			sender.sendReservoirInfo(spaceId, reservoirDto);
+			val spaceId = reservoirDto.getSpaceId();
+			sender.sendReservoirInfo(spaceId.toString(), reservoirDto);
 			log.info("🔔 Получено обновление для spaceId={} из канала {}: {}", spaceId, channel, reservoirDto);
 
 		} catch (IOException e) {
