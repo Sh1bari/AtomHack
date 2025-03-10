@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.noxly.simulation.models.models.dtos.PipeDto;
 import ru.noxly.simulation.models.models.requests.PipeCreateDtoReq;
 import ru.noxly.simulation.models.models.requests.PipeUpdateDtoReq;
+import ru.noxly.simulation.models.models.socket.PipeUpdateSocketDto;
+import ru.noxly.simulation.models.models.socket.SocketEntityEnum;
+import ru.noxly.simulation.redis.PipePublisher;
 import ru.noxly.simulation.services.PipeService;
 
 @RestController
@@ -29,12 +32,21 @@ public class PipeController {
 
     private final ConversionService conversionService;
 
+    private final PipePublisher pipePublisher;
+
     @Operation(summary = "Создать новую трубу")
     @ApiResponses()
     @PostMapping("/pipes")
     public ResponseEntity<PipeDto> createPipe(@RequestBody PipeCreateDtoReq request) {
-        val space = pipeService.createPipe(request);
-        val response = conversionService.convert(space, PipeDto.class);
+        val pipe = pipeService.createPipe(request);
+        val response = conversionService.convert(pipe, PipeDto.class);
+        pipePublisher.publishUpdate(
+                pipe.getSource().getSpace().getId(),
+                PipeUpdateSocketDto.init()
+                        .setCommand(SocketEntityEnum.CREATE)
+                        .setPipe(response)
+                        .build()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -57,8 +69,16 @@ public class PipeController {
     @Operation(summary = "Удалить трубу")
     @ApiResponses
     @DeleteMapping("/pipes/{id}")
-    public ResponseEntity<String> deletePipe(@PathVariable String id) {
-        pipeService.deletePipe(id);
+    public ResponseEntity<String> deletePipe(@PathVariable Long id) {
+        val pipe = pipeService.deletePipe(id);
+        val response = conversionService.convert(pipe, PipeDto.class);
+        pipePublisher.publishUpdate(
+                pipe.getSource().getSpace().getId(),
+                PipeUpdateSocketDto.init()
+                        .setCommand(SocketEntityEnum.DELETE)
+                        .setPipe(response)
+                        .build()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)

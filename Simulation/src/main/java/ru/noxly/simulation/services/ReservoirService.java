@@ -7,6 +7,7 @@ import ru.noxly.simulation.models.entities.Reservoir;
 import ru.noxly.simulation.models.entities.Space;
 import ru.noxly.simulation.models.models.requests.ReservoirCreateDtoReq;
 import ru.noxly.simulation.models.models.requests.ReservoirUpdateDtoReq;
+import ru.noxly.simulation.redis.ReservoirPublisher;
 import ru.noxly.simulation.repositories.RepoResolver;
 
 @Service
@@ -42,8 +43,9 @@ public class ReservoirService {
     }
 
     @Transactional
-    public void deleteReservoir(String id) {
+    public Reservoir deleteReservoir(String id) {
         val reservoir = repoResolver.resolve(Reservoir.class).findById(id);
         repoResolver.getReservoirRepository().delete(reservoir);
+        return reservoir;
     }
 }

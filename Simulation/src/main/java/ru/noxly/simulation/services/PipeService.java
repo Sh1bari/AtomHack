@@ -44,8 +44,10 @@ public class PipeService {
         return entity;
     }
 
-    public void deletePipe(String id) {
+    public Pipe deletePipe(Long id) {
         val pipe = repoResolver.resolve(Pipe.class).findById(id);
         repoResolver.getPipeRepository().delete(pipe);
+
+        return pipe;
     }
 }

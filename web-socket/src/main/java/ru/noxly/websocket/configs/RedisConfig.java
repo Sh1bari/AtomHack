@@ -15,6 +15,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import redis.clients.jedis.JedisPoolConfig;
+import ru.noxly.websocket.redis.PipeSubscriber;
 import ru.noxly.websocket.redis.ReservoirSubscriber;
 
 import java.time.Duration;
@@ -55,17 +56,26 @@ public class RedisConfig {
     }
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory,
-                                                                       MessageListenerAdapter listenerAdapter) {
+                                                                       MessageListenerAdapter reservoirListenerAdapter,
+                                                                       MessageListenerAdapter pipeListenerAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, new PatternTopic("reservoir-updates:*")); // Подписка на все spaceId
+        container.addMessageListener(reservoirListenerAdapter, new PatternTopic("reservoir-updates:*"));
+        container.addMessageListener(pipeListenerAdapter, new PatternTopic("pipe-updates:*"));
+
         return container;
     }
 
     @Bean
-    public MessageListenerAdapter messageListenerAdapter(ReservoirSubscriber subscriber) {
+    public MessageListenerAdapter reservoirListenerAdapter(ReservoirSubscriber subscriber) {
         return new MessageListenerAdapter(subscriber, "receiveMessage");
     }
+
+    @Bean
+    public MessageListenerAdapter pipeListenerAdapter(PipeSubscriber pipeSubscriber) {
+        return new MessageListenerAdapter(pipeSubscriber, "receiveMessage");
+    }
+
 
     @Bean
     public ObjectMapper objectMapper() {

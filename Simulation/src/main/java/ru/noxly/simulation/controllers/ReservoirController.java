@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.noxly.simulation.models.models.dtos.ReservoirDto;
 import ru.noxly.simulation.models.models.requests.ReservoirCreateDtoReq;
 import ru.noxly.simulation.models.models.requests.ReservoirUpdateDtoReq;
+import ru.noxly.simulation.models.models.socket.ReservoirUpdateSocketDto;
+import ru.noxly.simulation.models.models.socket.SocketEntityEnum;
+import ru.noxly.simulation.redis.ReservoirPublisher;
 import ru.noxly.simulation.services.ReservoirService;
 
 @RestController
@@ -29,12 +32,20 @@ public class ReservoirController {
 
     private final ConversionService conversionService;
 
+    private final ReservoirPublisher reservoirPublisher;
+
     @Operation(summary = "Создать новый резервуар")
     @ApiResponses()
     @PostMapping("/reservoirs")
     public ResponseEntity<ReservoirDto> createReservoir(@RequestBody ReservoirCreateDtoReq request) {
         val reservoir = reservoirService.createReservoir(request);
         val response = conversionService.convert(reservoir, ReservoirDto.class);
+        reservoirPublisher.publishUpdate(
+                ReservoirUpdateSocketDto.init()
+                        .setCommand(SocketEntityEnum.CREATE)
+                        .setReservoir(response)
+                        .build()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -58,7 +69,14 @@ public class ReservoirController {
     @ApiResponses
     @DeleteMapping("/reservoirs/{id}")
     public ResponseEntity<String> deleteReservoir(@PathVariable String id) {
-        reservoirService.deleteReservoir(id);
+        val reservoir = reservoirService.deleteReservoir(id);
+        val response = conversionService.convert(reservoir, ReservoirDto.class);
+        reservoirPublisher.publishUpdate(
+                ReservoirUpdateSocketDto.init()
+                        .setCommand(SocketEntityEnum.DELETE)
+                        .setReservoir(response)
+                        .build()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
