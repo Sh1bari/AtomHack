@@ -1,4 +1,29 @@
 services:
+  simulation-ui:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
+    image: registry.sh1bari.ru/atom/simulation-ui:1.0.0
+    environment:
+      - VITE_MAIN_ENDPOINT=https://hack.noxly.ru/api
+      - VITE_SOCKET_ENDPOINT=https://ws.hack.noxly.ru/api/ws
+    command: [ 'yarn', 'preview' ]
+    networks:
+      - traefik_network
+      - atom-custom-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.platform.rule=Host(`ui.hack.noxly.ru`)"
+      - "traefik.http.routers.platform.entrypoints=websecure"
+      - "traefik.http.routers.platform.tls=true"
+      - "traefik.http.routers.platform.tls.certresolver=myresolver"
+      - "traefik.http.services.platform.loadbalancer.server.port=3000"
+      - "traefik.http.routers.platform.priority=26"
+      - "traefik.docker.network=traefik_network"
+
   simulationpostgres:
     deploy:
       mode: replicated
